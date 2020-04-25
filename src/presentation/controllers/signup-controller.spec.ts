@@ -1,6 +1,7 @@
 import { SignUpController } from './signup-controller'
 import { MissingParamError } from '../errors/missing-param-error'
 import { EmailValidator } from '../protocols/email-validator'
+import { InvalidParamError } from '../errors/invalid-param-error'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -87,6 +88,6 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new Error('Invalid email'))
+    expect(httpResponse.body).toEqual(new InvalidParamError('email'))
   })
 })
