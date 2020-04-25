@@ -11,7 +11,7 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.error).toEqual(new Error('Missing Param: name'))
+    expect(httpResponse.body).toEqual(new Error('name'))
   })
 
   test('should return 400 if no email is provided', () => {
@@ -24,6 +24,6 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body.error).toEqual(new Error('Missing Param: email'))
+    expect(httpResponse.body).toEqual(new Error('email'))
   })
 })
