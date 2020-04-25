@@ -2,6 +2,10 @@
   "name": "clean-node-api-practice",
   "version": "1.0.0",
   "license": "MIT",
+  "scripts": {
+    "test": "jest --passWithNoTests --watch",
+    "test:staged": "jest --passWithNoTests"
+  },
   "devDependencies": {
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
