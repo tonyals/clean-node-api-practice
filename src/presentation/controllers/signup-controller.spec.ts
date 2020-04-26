@@ -141,6 +141,24 @@ describe('SignUpController', () => {
     expect(httpResponse.body).toEqual(new Error())
   })
 
+  test('should call AddAccount with correct values', () => {
+    const { sut, addAccountStub } = makeSut()
+    const addAccountSpy = jest.spyOn(addAccountStub, 'addAccount')
+    sut.handle({
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    })
+    expect(addAccountSpy).toHaveBeenCalledWith({
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    })
+  })
+
   test('should returns 200 if AddAccount success', () => {
     const { sut } = makeSut()
     const httpResponse = sut.handle({
