@@ -2,6 +2,8 @@ import { SignUpController } from './signup-controller'
 import { MissingParamError } from '../errors/missing-param-error'
 import { EmailValidator } from '../protocols/email-validator'
 import { InvalidParamError } from '../errors/invalid-param-error'
+import { AddAccount, AddAccountModel } from '../../domain/usecases/add-account-usecase'
+import { AccountModel } from '../../domain/models/account-model'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -12,15 +14,32 @@ const makeEmailValidator = (): EmailValidator => {
   return new EmailValidatorStub()
 }
 
+const makeAddAccount = (): AddAccount => {
+  class AddAccountStub implements AddAccount {
+    addAccount (account: AddAccountModel): AccountModel {
+      const fakeAccount = {
+        id: 'any_id',
+        name: 'any_name',
+        email: 'any_email@mail.com',
+        password: 'any_password'
+      }
+      return fakeAccount
+    }
+  }
+  return new AddAccountStub()
+}
+
 interface SutTypes {
+  addAccountStub: AddAccount
   emailValidatorStub: EmailValidator
   sut: SignUpController
 }
 
 const makeSut = (): SutTypes => {
+  const addAccountStub = makeAddAccount()
   const emailValidatorStub = makeEmailValidator()
-  const sut = new SignUpController(emailValidatorStub)
-  return { sut, emailValidatorStub }
+  const sut = new SignUpController(emailValidatorStub, addAccountStub)
+  return { sut, emailValidatorStub, addAccountStub }
 }
 
 describe('SignUpController', () => {
@@ -120,5 +139,24 @@ describe('SignUpController', () => {
     })
     expect(httpResponse.statusCode).toBe(500)
     expect(httpResponse.body).toEqual(new Error())
+  })
+
+  test('should returns 200 if AddAccount success', () => {
+    const { sut } = makeSut()
+    const httpResponse = sut.handle({
+      body: {
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'valid_password',
+        passwordConfirmation: 'valid_password'
+      }
+    })
+    expect(httpResponse.statusCode).toBe(200)
+    expect(httpResponse.body).toEqual({
+      id: 'any_id',
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
   })
 })
