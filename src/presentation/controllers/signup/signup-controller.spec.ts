@@ -6,6 +6,7 @@ import {
 } from './signup-protocols'
 import { SignUpController } from './signup-controller'
 import { EmailValidator } from '../../protocols/email-validator'
+import { serverError } from '../../helpers/http-helper'
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -154,7 +155,7 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new Error())
+    expect(httpResponse).toEqual(serverError())
   })
 
   test('should call AddAccount with correct values', () => {
@@ -189,7 +190,7 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse.body).toEqual(new Error())
+    expect(httpResponse).toEqual(serverError())
   })
 
   test('should returns 200 if AddAccount success', () => {
