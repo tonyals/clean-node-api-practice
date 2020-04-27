@@ -48,6 +48,19 @@ describe('DbAddAccount', () => {
     expect(encryptSpy).toHaveBeenCalledWith('valid_password')
   })
 
+  test('should DbAddAccount throws if Encrypter throws', async () => {
+    const { sut, encrypterStub } = makeSut()
+    jest.spyOn(encrypterStub, 'encrypt')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const account = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'valid_password'
+    }
+    const promise = sut.addAccount(account)
+    await expect(promise).rejects.toEqual(new Error())
+  })
+
   test('should call AddAccountRepository with correct values', async () => {
     const { sut, addAccountRepositoryStub } = makeSut()
     const addAccountSpy = jest.spyOn(addAccountRepositoryStub, 'addAccountRepository')
@@ -60,7 +73,7 @@ describe('DbAddAccount', () => {
     expect(addAccountSpy).toHaveBeenCalledWith({
       name: 'valid_name',
       email: 'valid_email',
-      password: 'valid_password'
+      password: 'hashed_password'
     })
   })
 })
