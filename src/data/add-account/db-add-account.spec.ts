@@ -7,7 +7,13 @@ import { Encrypter } from '../protocols/encrypter'
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
     async addAccountRepository (accountData: AddAccountModel): Promise<AccountModel> {
-      return new Promise(resolve => resolve(null))
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email',
+        password: 'hashed_password'
+      }
+      return new Promise(resolve => resolve(fakeAccount))
     }
   }
   return new AddAccountRepositoryStub()
@@ -88,5 +94,21 @@ describe('DbAddAccount', () => {
     }
     const promise = sut.addAccount(account)
     await expect(promise).rejects.toEqual(new Error())
+  })
+
+  test('should DbAddAccount returns an account on success', async () => {
+    const { sut } = makeSut()
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password'
+    }
+    const account = await sut.addAccount(accountData)
+    expect(account).toEqual({
+      id: 'valid_id',
+      name: 'valid_name',
+      email: 'valid_email',
+      password: 'hashed_password'
+    })
   })
 })
