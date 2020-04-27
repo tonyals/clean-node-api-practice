@@ -2,15 +2,15 @@ import {
   AddAccount,
   AddAccountModel,
   AccountModel,
-  AddAccountRepository,
+  AccountRepository,
   Encrypter
 } from './db-add-account-protocols'
 
 export class DbAddAccount implements AddAccount {
-  private readonly addAccountRepository: AddAccountRepository
+  private readonly addAccountRepository: AccountRepository
   private readonly encrypter: Encrypter
 
-  constructor (addAccountRepository: AddAccountRepository, encrypter: Encrypter) {
+  constructor (addAccountRepository: AccountRepository, encrypter: Encrypter) {
     this.addAccountRepository = addAccountRepository
     this.encrypter = encrypter
   }
