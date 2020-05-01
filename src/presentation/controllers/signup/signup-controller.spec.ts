@@ -155,7 +155,7 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('should call AddAccount with correct values', async () => {
@@ -190,7 +190,7 @@ describe('SignUpController', () => {
       }
     })
     expect(httpResponse.statusCode).toBe(500)
-    expect(httpResponse).toEqual(serverError())
+    expect(httpResponse).toEqual(serverError(new Error()))
   })
 
   test('should returns 200 if AddAccount success', async () => {
